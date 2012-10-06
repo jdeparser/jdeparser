@@ -100,16 +100,15 @@ public abstract class JExpr {
     }
 
     public static JExpression dotclass(final JClass cl) {
-        return new JExpressionImpl() {
-                public void generate(JFormatter f) {
-                    JClass c;
-                    if(cl instanceof JNarrowedClass)
-                        c = ((JNarrowedClass)cl).basis;
-                    else
-                        c = cl;
-                    f.g(c).p(".class");
-                }
-            };
+        return new DotRef(cl, ".class");
+    }
+
+    public static JExpression dotthis(final JClass cl) {
+        return new DotRef(cl, ".this");
+    }
+
+    public static JExpression dotsuper(final JClass cl) {
+        return new DotRef(cl, ".super");
     }
 
     public static JArrayCompRef component(JExpression lhs, JExpression index) {
@@ -300,6 +299,26 @@ public abstract class JExpr {
                     f.p('(').p(source).p(')');
             }
         };
+    }
+
+    private static class DotRef extends JExpressionImpl {
+
+        private final JClass cl;
+        private final String ref;
+
+        public DotRef(final JClass cl, final String ref) {
+            this.cl = cl;
+            this.ref = ref;
+        }
+
+        public void generate(final JFormatter f) {
+            JClass c;
+            if(cl instanceof JNarrowedClass)
+                c = ((JNarrowedClass) cl).basis;
+            else
+                c = cl;
+            f.g(c).p(ref);
+        }
     }
 }
 
