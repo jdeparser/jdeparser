@@ -37,6 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+/* Modified by Red Hat */
 
 package com.sun.codemodel;
 
@@ -342,6 +343,16 @@ public final class JBlock implements JGenerable, JStatement {
      */
     public JTryBlock _try() {
         return insert(new JTryBlock());
+    }
+
+    /**
+     * Create a {@code synchronized} statement and add it to this block.
+     *
+     * @param lock the lock expression
+     * @return the newly generated synchronization statement
+     */
+    public JSynchronized _synchronized(JExpression lock) {
+        return insert(new JSynchronized(lock));
     }
 
     /**
