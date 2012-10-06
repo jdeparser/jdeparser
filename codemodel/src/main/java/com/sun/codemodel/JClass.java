@@ -316,6 +316,15 @@ public abstract class JClass extends JType
     }
 
     /**
+     * Create "? super T" from T
+     *
+     * @return never null
+     */
+    public final JClass superWildcard() {
+        return new JTypeWildcard(this, true);
+    }
+
+    /**
      * Substitutes the type variables with their actual arguments.
      * 
      * <p>
