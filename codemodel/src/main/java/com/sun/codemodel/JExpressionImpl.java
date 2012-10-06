@@ -149,6 +149,10 @@ public abstract class JExpressionImpl implements JExpression
         return JOp.ne(this, right);
     }
 
+    public final JExpression cond(final JExpression ifTrue, final JExpression ifFalse) {
+        return JOp.cond(this, ifTrue, ifFalse);
+    }
+
     public final JExpression _instanceof(JType right) {
         return JOp._instanceof(this, right);
     }

@@ -141,6 +141,8 @@ public interface JExpression extends JGenerable {
     JExpression eq(JExpression right);
     JExpression ne(JExpression right);
 
+    JExpression cond(JExpression ifTrue, JExpression ifFalse);
+
     /**
      * Returns "[this] instanceof [right]"
      */
