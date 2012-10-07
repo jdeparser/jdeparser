@@ -245,7 +245,18 @@ public final class JCodeModel {
     public JDefinedClass anonymousClass(Class<?> baseType) {
         return anonymousClass(ref(baseType));
     }
-    
+
+    /**
+     * Create a wildcard type with multiple bounds.  The first bound must be
+     * a concrete class or interface, and the subsequent bounds must be interfaces.
+     *
+     * @param baseTypes the base types
+     * @return the wildcard type
+     */
+    public JClass multiBoundWildcard(JClass... baseTypes) {
+        return new JExtendsWildcard(baseTypes.clone());
+    }
+
     /**
      * Generates Java source code.
      * A convenience method for <code>build(destDir,destDir,System.out)</code>.

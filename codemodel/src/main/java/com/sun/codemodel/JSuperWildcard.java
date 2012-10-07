@@ -37,9 +37,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+/* Modified by Red Hat */
 
 package com.sun.codemodel;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,7 +49,7 @@ import java.util.List;
  * Represents a wildcard type like "? extends Foo" or "? super Foo".
  *
  * <p>
- * Instances of this class can be obtained from {@link JClass#wildcard()}
+ * Instances of this class can be obtained from {@link com.sun.codemodel.JClass#wildcard()}
  *
  * <p>
  * Our modeling of types are starting to look really ugly.
@@ -56,51 +58,33 @@ import java.util.List;
  *
  * @author Kohsuke Kawaguchi
  */
-final class JTypeWildcard extends JClass {
+final class JSuperWildcard extends JClass {
 
-    private final JClass bound;
-    private final boolean _super;
+    private final JClass primaryBound;
 
-    JTypeWildcard(JClass bound, boolean _super) {
-        super(bound.owner());
-        this.bound = bound;
-        this._super = _super;
-    }
-
-    JTypeWildcard(JClass bound) {
-        this(bound, false);
+    JSuperWildcard(final JClass primaryBound) {
+        super(primaryBound.owner());
+        this.primaryBound = primaryBound;
     }
 
     public String name() {
-        return _super ? "? super " + bound.name() : "? extends " + bound.name();
+        return "? super " + primaryBound.name();
     }
 
     public String fullName() {
-        return _super ? "? super " + bound.fullName() : "? extends " + bound.fullName();
+        return "? super " + primaryBound.fullName();
     }
 
     public JPackage _package() {
         return null;
     }
 
-    /**
-     * Returns the class bound of this variable.
-     *
-     * <p>
-     * If no bound is given, this method returns {@link Object}.
-     */
     public JClass _extends() {
-        if(bound!=null)
-            return bound;
-        else
-            return owner().ref(Object.class);
+        return owner().ref(Object.class);
     }
 
-    /**
-     * Returns the interface bounds of this variable.
-     */
     public Iterator<JClass> _implements() {
-        return bound._implements();
+        return Collections.<JClass>emptySet().iterator();
     }
 
     public boolean isInterface() {
@@ -112,19 +96,15 @@ final class JTypeWildcard extends JClass {
     }
 
     protected JClass substituteParams(JTypeVar[] variables, List<JClass> bindings) {
-        JClass nb = bound.substituteParams(variables,bindings);
-        if(nb==bound)
+        JClass nb = primaryBound.substituteParams(variables,bindings);
+        if(nb == primaryBound) {
             return this;
-        else
-            return new JTypeWildcard(nb, _super);
+        } else {
+            return new JSuperWildcard(nb);
+        }
     }
 
     public void generate(JFormatter f) {
-        if (_super)
-            f.p("? super").g(bound);
-        else if(bound._extends()==null)
-            f.p("?");   // instead of "? extends Object"
-        else
-            f.p("? extends").g(bound);
+        f.p("? super ").g(primaryBound);
     }
 }

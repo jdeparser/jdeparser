@@ -37,6 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+/* Modified by Red Hat */
 
 package com.sun.codemodel;
 
@@ -312,7 +313,7 @@ public abstract class JClass extends JType
      * @return never null
      */
     public final JClass wildcard() {
-        return new JTypeWildcard(this);
+        return new JExtendsWildcard(this);
     }
 
     /**
@@ -321,7 +322,7 @@ public abstract class JClass extends JType
      * @return never null
      */
     public final JClass superWildcard() {
-        return new JTypeWildcard(this, true);
+        return new JSuperWildcard(this);
     }
 
     /**
