@@ -48,6 +48,6 @@ package com.sun.codemodel;
 
 public interface JDeclaration {
 
-    public void declare(JFormatter f);
+    void declare(JFormatter f);
 
 }

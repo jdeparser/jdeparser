@@ -40,6 +40,8 @@
 
 package com.sun.codemodel;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -53,8 +55,8 @@ import java.util.List;
 public final class JTypeVar extends JClass implements JDeclaration {
     
     private final String name;
-    
-    private JClass bound;
+
+    private List<JClass> bounds;
 
     JTypeVar(JCodeModel owner, String _name) {
         super(owner);
@@ -79,9 +81,8 @@ public final class JTypeVar extends JClass implements JDeclaration {
      * @return  this
      */
     public JTypeVar bound( JClass c ) {
-        if(bound!=null)
-            throw new IllegalArgumentException("type variable has an existing class bound "+bound);
-        bound = c;
+        if (bounds == null) bounds = new ArrayList<JClass>(1);
+        bounds.add(c);
         return this;
     }
 
@@ -92,8 +93,8 @@ public final class JTypeVar extends JClass implements JDeclaration {
      * If no bound is given, this method returns {@link Object}.
      */
     public JClass _extends() {
-        if(bound!=null)
-            return bound;
+        if (bounds!=null)
+            return bounds.get(0);
         else
             return owner().ref(Object.class);
     }
@@ -102,7 +103,13 @@ public final class JTypeVar extends JClass implements JDeclaration {
      * Returns the interface bounds of this variable.
      */
     public Iterator<JClass> _implements() {
-        return bound._implements();
+        if (bounds != null) {
+            final Iterator<JClass> iterator = bounds.iterator();
+            iterator.next();
+            return iterator;
+        } else {
+            return Collections.<JClass>emptySet().iterator();
+        }
     }
 
     public boolean isInterface() {
@@ -118,8 +125,16 @@ public final class JTypeVar extends JClass implements JDeclaration {
      */
     public void declare(JFormatter f) {
         f.id(name);
-        if(bound!=null)
-            f.p("extends").g(bound);
+        if (bounds != null) {
+            final Iterator<JClass> iterator = bounds.iterator();
+            if (iterator.hasNext()) {
+                f.p("extends");
+                f.g(iterator.next());
+                while (iterator.hasNext()) {
+                    f.p("&").g(iterator.next());
+                }
+            }
+        }
     }
 
 
