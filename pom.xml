@@ -46,7 +46,7 @@
     <groupId>org.jboss.jdeparser</groupId>
     <artifactId>jdeparser</artifactId>
     <description>Java source code generation library</description>
-    <version>1.0.0.Final</version>
+    <version>1.0.1.Final-SNAPSHOT</version>
     <parent>
         <groupId>org.jboss</groupId>
         <artifactId>jboss-parent</artifactId>
