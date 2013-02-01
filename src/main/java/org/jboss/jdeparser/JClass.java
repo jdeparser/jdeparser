@@ -278,6 +278,9 @@ public abstract class JClass extends JType
      * <code>.narrow(X)</code> builds <code>Set&lt;X></code> from <code>Set</code>.
      */
     public JClass narrow( JClass clazz ) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("clazz must not be null");
+        }
         return new JNarrowedClass(this,clazz);
     }
 
@@ -286,10 +289,22 @@ public abstract class JClass extends JType
     }
 
     public JClass narrow( JClass... clazz ) {
+        for (int i = 0; i < clazz.length; i++) {
+            JClass clazz0 = clazz[i];
+            if (clazz0 == null) {
+                throw new IllegalArgumentException("Element " + i + " of clazz is null");
+            }
+        }
         return new JNarrowedClass(this,Arrays.asList(clazz.clone()));
     }
 
     public JClass narrow( List<? extends JClass> clazz ) {
+        for (int i = 0; i < clazz.size(); i++) {
+            JClass clazz0 = clazz.get(i);
+            if (clazz0 == null) {
+                throw new IllegalArgumentException("Element " + i + " of clazz is null");
+            }
+        }
         return new JNarrowedClass(this,new ArrayList<JClass>(clazz));
     }
 

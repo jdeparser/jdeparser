@@ -77,6 +77,9 @@ class JNarrowedClass extends JClass {
 
     @Override
     public JClass narrow( JClass clazz ) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("clazz must not be null");
+        }
         List<JClass> newArgs = new ArrayList<JClass>(args);
         newArgs.add(clazz);
         return new JNarrowedClass(basis,newArgs);
@@ -84,6 +87,12 @@ class JNarrowedClass extends JClass {
 
     @Override
     public JClass narrow( JClass... clazz ) {
+        for (int i = 0; i < clazz.length; i++) {
+            JClass clazz0 = clazz[i];
+            if (clazz0 == null) {
+                throw new IllegalArgumentException("Element " + i + " of clazz is null");
+            }
+        }
         List<JClass> newArgs = new ArrayList<JClass>(args);
         newArgs.addAll(Arrays.asList(clazz));
         return new JNarrowedClass(basis,newArgs);
