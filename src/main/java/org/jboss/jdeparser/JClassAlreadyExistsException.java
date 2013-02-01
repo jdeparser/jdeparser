@@ -53,6 +53,7 @@ public class JClassAlreadyExistsException extends Exception {
 	private final JDefinedClass existing;
     
     public JClassAlreadyExistsException( JDefinedClass _existing ) {
+        super("Class " + _existing.fullName() + " already exists");
         this.existing = _existing;
     }
     
