@@ -37,31 +37,30 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+/* Modified by Red Hat */
 
 package org.jboss.jdeparser;
 
 /**
  * Indicates that the class is already created.
- * 
- * @author
- * 	Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ *
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class JClassAlreadyExistsException extends Exception {
+public class JClassAlreadyExistsException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final JDefinedClass existing;
-    
-    public JClassAlreadyExistsException( JDefinedClass _existing ) {
+    private final JDefinedClass existing;
+
+    public JClassAlreadyExistsException(JDefinedClass _existing) {
         super("Class " + _existing.fullName() + " already exists");
         this.existing = _existing;
     }
-    
+
     /**
      * Gets a reference to the existing {@link JDefinedClass}.
-     * 
-     * @return
-     *      This method always return non-null valid object.
+     *
+     * @return This method always return non-null valid object.
      */
     public JDefinedClass getExistingClass() {
         return existing;
